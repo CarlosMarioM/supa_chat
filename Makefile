@@ -17,7 +17,7 @@ on:
       - name: checkout repo
         uses: actions/checkout@main
       - name: build application
-        run: make deploy OUTPUT=supa_auth
+        run: make deploy OUTPUT=supa_chat
 
 # Deploy the Flutter web project to GitHub
 deploy:

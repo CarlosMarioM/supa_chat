@@ -1,35 +1,57 @@
-name: Deploy to GitHub Pages
+# Makefile for deploying the Flutter web projects to GitHub
+
+BASE_HREF = /$(OUTPUT)/
+# Replace this with your GitHub username
+GITHUB_USER = carlosmariom
+GITHUB_REPO = https://github.com/$(GITHUB_USER)/$(OUTPUT)
+BUILD_VERSION := $(shell grep 'version:' pubspec.yaml | awk '{print $$2}')
 
 on:
-  push:
-    branches: [ main ]
+     push:
+       branches: [ master ]
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
+   jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - name: build application
+        run: make deploy OUTPUT=bitstagram
+
+# Deploy the Flutter web project to GitHub
+deploy:
+ifndef OUTPUT
+	$(error OUTPUT is not set. Usage: make deploy OUTPUT=<output_repo_name>)
+endif
+
+	@echo "Clean existing repository"
+	flutter clean
+
+	@echo "Getting packages..."
+	flutter pub get
+
+	@echo "Generating the web folder..."
+	flutter create . --platform web
+
+	@echo "Building for web..."
+  	flutter build web \
+		--release \
+		--base-href $(BASE_HREF) \
+		--dart-define=SUPABASE_URL=$(SUPABASE_URL) \
+		--dart-define=SUPABASE_ANON_KEY=$(SUPABASE_ANON_KEY) \
+		--no-tree-shake-icons
     
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.19.0'
-        
-    - name: Install dependencies
-      run: flutter pub get
-      
-    - name: Build with secrets
-      run: |
-        flutter build web \
-          --release \
-          --base-href /supa_chat/ \
-          --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
-          --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
-          --no-tree-shake-icons
-          
-    - name: Deploy to Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build/web
-        keep_files: false
+	@echo "Deploying to git repository"
+	cd build/web && \
+	git init && \
+	git add . && \
+	git commit -m "Deploy Version $(BUILD_VERSION)" && \
+	git branch -M main && \
+	git remote add origin $(GITHUB_REPO) && \
+	git push -u -f origin main
+
+	@echo "✅ Finished deploy: $(GITHUB_REPO)"
+	@echo "🚀 Flutter web URL: https://$(GITHUB_USER).github.io/$(OUTPUT)/"
+   
+.PHONY: deploy

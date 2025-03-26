@@ -25,12 +25,12 @@ get-deps:
 build-web:
 	@echo "🛠️ Building for web with secrets..."
 	flutter build web \
-		--release \
-		--base-href $(BASE_HREF) \
-		--dart-define=SUPABASE_URL=$(SUPABASE_URL) \
-		--dart-define=SUPABASE_ANON_KEY=$(SUPABASE_ANON_KEY) \
-		--web-renderer html \
-		--no-tree-shake-icons
+    --release \
+    --base-href /supa_chat/ \
+    --dart-define=SUPABASE_URL=https://roqustftdtsdgldpobbe.supabase.co \
+    --dart-define=SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcXVzdGZ0ZHRzZGdsZHBvYmJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5MjkwNDMsImV4cCI6MjA1ODUwNTA0M30.gQKuomBvbYLFrX37wM8_Xt5awfSwNGjQwX2kA7OYe1w \
+    --no-tree-shake-icons
+		
 
 # Deploy to GitHub Pages branch
 push-to-gh-pages:

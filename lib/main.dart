@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supa_chat/view/splash_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,20 +9,11 @@ import 'constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (kIsWeb) {
-    print("MIRAAA ${Config.supabaseUrl}");
-    await Supabase.initialize(
-      url: Config.supabaseUrl,
-      anonKey: Config.supabaseAnonKey,
-    );
-  } else {
-    print("only web enable isWeb: $kIsWeb");
-    // await dotenv.load(fileName: ".env");
-    // await Supabase.initialize(
-    //   url: dotenv.env['URL'] ?? '',
-    //   anonKey: dotenv.env['SUPA_KEY'] ?? '',
-    // );
-  }
+  print("MIRAAA ${Config.supabaseUrl}");
+  await Supabase.initialize(
+    url: Config.supabaseUrl,
+    anonKey: Config.supabaseAnonKey,
+  );
 
   runApp(const MyApp());
 }

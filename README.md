@@ -1,6 +1,6 @@
 # SupaChat - Flutter & Supabase Realtime Chat
 
-![SupaChat Banner](https://placehold.co/1200x400?text=SupaChat+Demo)
+![SupaChat Banner](https://imgs.search.brave.com/OPII0jh6hUDctO_9zDf0Yy6U6WUwrUC04xSCkW-Iteo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9zdHls/ZXMucmVkZGl0bWVk/aWEuY29tL3Q1XzQ3/ZGEzbC9zdHlsZXMv/Y29tbXVuaXR5SWNv/bl84d2Jxa3Awcm96/amQxLmpwZz9mb3Jt/YXQ9cGpwZyZzPTcw/ODYyZWVjOWMyOWFh/MGMyNWYyYTZiOWU3/MDg2OThkZDAzNDc0/ZTU)
 
 A feature-rich chat application built with Flutter and Supabase, showcasing realtime functionality with optimized performance.
 

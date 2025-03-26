@@ -1,4 +1,3 @@
-# Makefile for Flutter Web Deployment
 GITHUB_USER := carlosmariom
 BASE_HREF := /$(OUTPUT)/
 BUILD_VERSION := $(shell grep 'version:' pubspec.yaml | awk '{print $$2}')
@@ -20,7 +19,7 @@ endif
 		$(if $(SUPABASE_ANON_KEY),--dart-define=SUPABASE_ANON_KEY='$(SUPABASE_ANON_KEY)') \
 		--no-tree-shake-icons
 
-  @echo "📡 Deploying to GitHub Pages..."
+	@echo "📡 Deploying to GitHub Pages..."
 	@cd build/web && \
 	git init && \
 	git add . && \
@@ -31,7 +30,6 @@ endif
 
 	@echo "✅ Successfully deployed!"
 	@echo "🌐 Live at: https://$(GITHUB_USER).github.io/$(OUTPUT)/"
-
 
 	@echo "✅ Build complete!"
 	@echo "🌐 Preview: file://$(PWD)/build/web/index.html"

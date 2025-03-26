@@ -25,18 +25,20 @@ endif
 	@echo "📡 Deploying to GitHub Pages..."
 	@cd build/web && \
 	git init && \
-	git checkout -b main && \
+  git config --global user.email "github@actions.com" \
+  git config --global user.name "Github Actions" \
+	git checkout -b gh_pages && \
 	git add . && \
 	git commit -m "Deploy v$(BUILD_VERSION)" && \
-	if git remote get-url origin >/dev/null 2>&1; then \
+	if git remote get-url origin gh_pages; then \
 		git remote set-url origin https://$(GITHUB_TOKEN)@github.com/$(GITHUB_USER)/$(OUTPUT).git; \
 	else \
 		git remote add origin https://$(GITHUB_TOKEN)@github.com/$(GITHUB_USER)/$(OUTPUT).git; \
 	fi && \
-	git push -u -f origin main || \
+	git push -u -f origin gh_pages || \
 	(echo "⚠️ Failed to push with token, trying SSH..." && \
 	git remote set-url origin git@github.com:$(GITHUB_USER)/$(OUTPUT).git && \
-	git push -u -f origin main)
+	git push -u -f origin gh_pages)
 
 	@echo "✅ Successfully deployed!"
 	@echo "🌐 Live at: https://$(GITHUB_USER).github.io/$(OUTPUT)/"

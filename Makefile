@@ -11,6 +11,11 @@ endif
 	@echo "🚀 Starting deployment..."
 	
 	# Build with conditional Supabase flags
+
+	@echo "🛠️ Validating keys"
+	@echo "🛠️ 1 $(SUPABASE_URL)"
+	@echo "🛠️ 2 $(SUPABASE_ANON_KEY)"
+  
 	@echo "🛠️ Building web app..."
 	@flutter build web \
 		--release \
@@ -27,7 +32,7 @@ endif
 	git add . && \
 	git commit -m "Deploy v$(BUILD_VERSION)" && \
 	git branch -M main && \
-	git remote add origin $(GITHUB_REPO) && \
+	git remote add origin $(GITHUB_REPO) || echo "⚠️ Remote origin already exists" && \
 	git push -u -f origin main
 
 	@echo "✅ Successfully deployed!"

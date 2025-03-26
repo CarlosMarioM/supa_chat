@@ -24803,9 +24803,9 @@ asf(){var s=0,r=A.H(t.H),q,p,o,n,m,l,k
 var $async$asf=A.I(function(a,b){if(a===1)return A.E(b,r)
 while(true)switch(s){case 0:if($.a5==null)A.auO()
 $.a5.toString
-A.lQ("MIRAAA ")
+A.lQ("MIRAAA https://roqustftdtsdgldpobbe.supabase.co")
 s=2
-return A.C(A.ags("",""),$async$asf)
+return A.C(A.ags("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcXVzdGZ0ZHRzZGdsZHBvYmJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5MjkwNDMsImV4cCI6MjA1ODUwNTA0M30.gQKuomBvbYLFrX37wM8_Xt5awfSwNGjQwX2kA7OYe1w","https://roqustftdtsdgldpobbe.supabase.co"),$async$asf)
 case 2:if($.a5==null)A.auO()
 q=$.a5
 q.toString

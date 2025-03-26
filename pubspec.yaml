@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   supabase_flutter: ^2.8.4
   timeago: ^3.7.0
-  flutter_dotenv: ^5.2.1
+  # flutter_dotenv: ^5.2.1
   flutter_chat_reactions: ^0.1.1
 
 dev_dependencies:

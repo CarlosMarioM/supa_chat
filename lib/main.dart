@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supa_chat/view/splash_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'config.dart';
 import 'constants.dart';
@@ -17,11 +17,12 @@ void main() async {
       anonKey: Config.supabaseAnonKey,
     );
   } else {
-    await dotenv.load(fileName: ".env");
-    await Supabase.initialize(
-      url: dotenv.env['URL'] ?? '',
-      anonKey: dotenv.env['SUPA_KEY'] ?? '',
-    );
+    print("only web enable isWeb: $kIsWeb");
+    // await dotenv.load(fileName: ".env");
+    // await Supabase.initialize(
+    //   url: dotenv.env['URL'] ?? '',
+    //   anonKey: dotenv.env['SUPA_KEY'] ?? '',
+    // );
   }
 
   runApp(const MyApp());

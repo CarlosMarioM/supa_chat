@@ -19,8 +19,8 @@ A feature-rich chat application built with Flutter and Supabase, showcasing real
 
 ### Installation
 ```bash
-git clone https://github.com/yourusername/supachat.git
-cd supachat
+git clone https://github.com/CarlosMarioM/supa_chat.git
+cd supa_chat
 flutter pub get
 ```
 
@@ -112,13 +112,6 @@ final reactionsStream = supabase
     .eq('message_id', message.id)
     .order('created_at');
 ```
-
-## 📱 Screenshots
-
-| Chat View | Reactions | Profile |
-|------------|-----------|---------|
-| ![Chat](https://placehold.co/300x600?text=Chat) | ![Reactions](https://placehold.co/300x600?text=Reactions) | ![Profile](https://placehold.co/300x600?text=Profile) |
-
 ## 📚 Resources
 
 - [Flutter Documentation](https://flutter.dev/docs)

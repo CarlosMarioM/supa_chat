@@ -3,24 +3,25 @@ name: Deploy Flutter Web
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      BASE_HREF: "/supa_chat/"
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
-          flutter-version: 3.10.6
+          flutter-version: '3.19.0'
 
-      - name: Run Makefile Command
+      - name: Run Deployment
         run: |
-           make deploy OUTPUT=supa_chat \
-           SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
-            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
-    
+          make deploy \
+            OUTPUT=supa_chat \
+            SUPABASE_URL="${{ secrets.SUPABASE_URL }}" \
+            SUPABASE_ANON_KEY="${{ secrets.SUPABASE_ANON_KEY }}"

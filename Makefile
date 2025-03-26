@@ -22,6 +22,8 @@ endif
 	@echo "📡 Deploying to GitHub Pages..."
 	@cd build/web && \
 	git init && \
+  git config user.email "actions@github.com" && \
+	git config user.name "GitHub Actions" && \
 	git add . && \
 	git commit -m "Deploy v$(BUILD_VERSION)" && \
 	git branch -M main && \

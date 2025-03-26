@@ -11,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kIsWeb) {
+    print("MIRAAA ${Config.supabaseUrl}");
     await Supabase.initialize(
       url: Config.supabaseUrl,
       anonKey: Config.supabaseAnonKey,

@@ -17,7 +17,7 @@ on:
       - name: checkout repo
         uses: actions/checkout@main
       - name: build application
-        run: make deploy OUTPUT=bitstagram
+        run: make deploy OUTPUT=supa_auth
 
 # Deploy the Flutter web project to GitHub
 deploy:
@@ -41,7 +41,7 @@ endif
 		--dart-define=SUPABASE_URL=$(SUPABASE_URL) \
 		--dart-define=SUPABASE_ANON_KEY=$(SUPABASE_ANON_KEY) \
 		--no-tree-shake-icons
-    
+
 	@echo "Deploying to git repository"
 	cd build/web && \
 	git init && \

@@ -1,7 +1,7 @@
 GITHUB_USER := carlosmariom
 BASE_HREF := /$(OUTPUT)/
 BUILD_VERSION := $(shell grep 'version:' pubspec.yaml | awk '{print $$2}')
-GITHUB_REPO = https://github.com/$(GITHUB_USER)/$(OUTPUT)
+GITHUB_REPO := https://github.com/$(GITHUB_USER)/$(OUTPUT)
 
 deploy:
 ifndef OUTPUT
@@ -10,16 +10,14 @@ endif
 
 	@echo "🚀 Starting deployment..."
 	
-	# Build with conditional Supabase flags
-
 	@echo "🛠️ Validating keys"
-	@echo "🛠️ 1 $(SUPABASE_URL)"
-	@echo "🛠️ 2 $(SUPABASE_ANON_KEY)"
+	@echo "🛠️ SUPABASE_URL: $(SUPABASE_URL)"
+	@echo "🛠️ SUPABASE_ANON_KEY: $(SUPABASE_ANON_KEY)"
   
 	@echo "🛠️ Building web app..."
 	@flutter build web \
 		--release \
-		--base-href /$(OUTPUT)/ \
+		--base-href $(BASE_HREF) \
 		$(if $(SUPABASE_URL),--dart-define=SUPABASE_URL='$(SUPABASE_URL)') \
 		$(if $(SUPABASE_ANON_KEY),--dart-define=SUPABASE_ANON_KEY='$(SUPABASE_ANON_KEY)') \
 		--no-tree-shake-icons
@@ -27,18 +25,22 @@ endif
 	@echo "📡 Deploying to GitHub Pages..."
 	@cd build/web && \
 	git init && \
-  git config user.email "actions@github.com" && \
-	git config user.name "GitHub Actions" && \
+	git checkout -b main && \
 	git add . && \
 	git commit -m "Deploy v$(BUILD_VERSION)" && \
-	git branch -M main && \
-	git remote add origin $(GITHUB_REPO) || echo "⚠️ Remote origin already exists" && \
-	git push -u -f origin main
+	if git remote get-url origin >/dev/null 2>&1; then \
+		git remote set-url origin https://$(GITHUB_TOKEN)@github.com/$(GITHUB_USER)/$(OUTPUT).git; \
+	else \
+		git remote add origin https://$(GITHUB_TOKEN)@github.com/$(GITHUB_USER)/$(OUTPUT).git; \
+	fi && \
+	git push -u -f origin main || \
+	(echo "⚠️ Failed to push with token, trying SSH..." && \
+	git remote set-url origin git@github.com:$(GITHUB_USER)/$(OUTPUT).git && \
+	git push -u -f origin main)
 
 	@echo "✅ Successfully deployed!"
 	@echo "🌐 Live at: https://$(GITHUB_USER).github.io/$(OUTPUT)/"
-
-	@echo "✅ Build complete!"
-	@echo "🌐 Preview: file://$(PWD)/build/web/index.html"
+	@echo "📦 Build version: v$(BUILD_VERSION)"
+	@echo "🔍 Preview: file://$(PWD)/build/web/index.html"
 
 .PHONY: deploy

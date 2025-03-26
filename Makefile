@@ -1,54 +1,55 @@
-# Makefile for deploying the Flutter web projects to GitHub
+# Makefile for deploying Flutter web projects to GitHub Pages with Supabase
 
-BASE_HREF = /$(OUTPUT)/
-# Replace this with your GitHub username
+# Configuration
 GITHUB_USER = carlosmariom
-GITHUB_REPO = https://github.com/$(GITHUB_USER)/$(OUTPUT)
+OUTPUT ?= supa_chat  # Default repo name
+BASE_HREF = /$(OUTPUT)/
 BUILD_VERSION := $(shell grep 'version:' pubspec.yaml | awk '{print $$2}')
+SUPABASE_URL ?= $(error SUPABASE_URL is not set)
+SUPABASE_ANON_KEY ?= $(error SUPABASE_ANON_KEY is not set)
 
-on:
-     push:
-       branches: [ master ]
-     pull_request:
-       branches: [ master ]
+# Main deployment target
+deploy: clean get-deps build-web push-to-gh-pages
 
-   jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-      - name: checkout repo
-        uses: actions/checkout@main
-      - name: build application
-        run: make deploy OUTPUT=supa_chat
-
-# Deploy the Flutter web project to GitHub
-deploy:
-ifndef OUTPUT
-	$(error OUTPUT is not set. Usage: make deploy OUTPUT=<output_repo_name>)
-endif
-
-	@echo "Clean existing repository"
+# Clean the project
+clean:
+	@echo "🚧 Cleaning project..."
 	flutter clean
 
-	@echo "Getting packages..."
+# Get dependencies
+get-deps:
+	@echo "📦 Getting packages..."
 	flutter pub get
 
-	@echo "Generating the web folder..."
-	flutter create . --platform web
+# Build for web with secrets
+build-web:
+	@echo "🛠️ Building for web with secrets..."
+	flutter build web \
+		--release \
+		--base-href $(BASE_HREF) \
+		--dart-define=SUPABASE_URL=$(SUPABASE_URL) \
+		--dart-define=SUPABASE_ANON_KEY=$(SUPABASE_ANON_KEY) \
+		--web-renderer html \
+		--no-tree-shake-icons
 
-	@echo "Building for web..."
-	flutter build web --base-href $(BASE_HREF) --no-tree-shake-icons --release
-
-	@echo "Deploying to git repository"
+# Deploy to GitHub Pages branch
+push-to-gh-pages:
+	@echo "🚀 Deploying to GitHub Pages..."
 	cd build/web && \
 	git init && \
-	git add . && \
-	git commit -m "Deploy Version $(BUILD_VERSION)" && \
-	git branch -M main && \
-	git remote add origin $(GITHUB_REPO) && \
-	git push -u -f origin main
+	git checkout -b gh-pages && \
+	git add -A && \
+	git commit -m "Deploy v$(BUILD_VERSION)" && \
+	git remote add origin https://github.com/$(GITHUB_USER)/$(OUTPUT).git && \
+	git push -f origin gh-pages
+	@echo "✅ Successfully deployed!"
+	@echo "🌐 Open: https://$(GITHUB_USER).github.io/$(OUTPUT)/"
 
-	@echo "✅ Finished deploy: $(GITHUB_REPO)"
-	@echo "🚀 Flutter web URL: https://$(GITHUB_USER).github.io/$(OUTPUT)/"
-   
-.PHONY: deploy
+# Local development server
+run:
+	flutter run -d chrome \
+		--dart-define=SUPABASE_URL=$(SUPABASE_URL) \
+		--dart-define=SUPABASE_ANON_KEY=$(SUPABASE_ANON_KEY) \
+		--web-renderer html
+
+.PHONY: deploy clean get-deps build-web push-to-gh-pages run
